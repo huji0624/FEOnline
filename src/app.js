@@ -1,8 +1,5 @@
-
-var glink = new CCLongLink();
-
 var HelloWorldLayer = cc.Layer.extend({
-    sprite:null,
+    // sprite:null,
     ctor:function () {
         //////////////////////////////
         // 1. super init first
@@ -18,12 +15,7 @@ var HelloWorldLayer = cc.Layer.extend({
         this.gmlayer = new GameLayer();
         this.addChild(this.gmlayer);
 
-        this.gmlayer.addBlock(new Land(0,0));
-        this.gmlayer.addBlock(new Land(1,1));
-        
-        glink.connect("127.0.0.1",3010,{},function(data){
-            cc.log(data);
-        });
+        this.gmlayer.addBlock(new Land(3,3));
 
         return true;
     }

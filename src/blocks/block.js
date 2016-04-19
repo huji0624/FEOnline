@@ -1,7 +1,9 @@
+var BLOCK_SIZE = 60;
+
 var Block = cc.Sprite.extend({
 
 	ctor:function(bx,by){
-		var sz = 60;
+		var sz = BLOCK_SIZE;
 
 		this._super();
 		this.initWithFile(res.PL_png,cc.rect(0,0,sz,sz));
@@ -20,6 +22,10 @@ var Block = cc.Sprite.extend({
         this.addChild(helloLabel);
 
 		return true;
+	},
+
+	syncInfo:function(){
+		return {bx:this.bx,by:this.by,stateid:this.stateid};
 	},
 
 	resPath:function(){

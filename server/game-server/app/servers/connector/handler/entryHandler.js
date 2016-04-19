@@ -4,7 +4,11 @@ module.exports = function(app) {
 
 var Handler = function(app) {
   this.app = app;
+
+  channel = app.get('channelService').getChannel("fe",true);
 };
+
+var smap = require("../../../game/smap.js");
 
 /**
  * New client entry.
@@ -15,7 +19,20 @@ var Handler = function(app) {
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
-  next(null, {code: 200, msg: 'game server is ok.'});
+
+	channel.add("jiji",this.app.get('serverId'));
+
+	var route_map = {
+		"sync" : "connector.entryHandler.sync"
+	};
+
+ 	next(null, {code: 200, msg: route_map});
+};
+
+Handler.prototype.sync = function(msg, session, next) {
+  channel.pushMessage("sync",[
+  	{t:0,bx:0,by:0}
+  ]);
 };
 
 /**

@@ -1,9 +1,16 @@
+var glink = new CCLongLink();
+glink.init();
+
 var GameLayer = cc.Layer.extend({
 
 	ctor:function () {
         this._super();
         this.init();
         this.blockcaches = {};
+
+        glink.connect("127.0.0.1",3010,{},function(data){
+            cc.log(data);
+        });
 
         var touchlis = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -16,15 +23,44 @@ var GameLayer = cc.Layer.extend({
 
         this.moveCameraOn(0,0,false);
 
+        glink.onEvent("sync",function(msg){
+            cc.log(msg);
+        });
+
         return true;
     },
 
     moveCameraOn:function(x,y,animate){
-       this.setPosition(x,y);
+        this.setPosition(x,y);
+    },
+
+    sync:function(){
+        var x = -this.getPositionX();
+        var y = -this.getPositionY();
+
+        var size = cc.winSize;
+        var sz = BLOCK_SIZE;
+        var sx = Math.floor(x/sz);
+        var ex = sx+Math.floor(size.width/sz);
+        var sy = Math.floor(y/sz);
+        var ey = sy+Math.floor(size.height/sz);
+
+        var infos=[];
+        for (var i = sx; i < ex; i++) {
+            for (var j = sy; j < ey; j++) {
+                var b = this.blockAt(i,j);
+                if(b){
+                    infos.push(b.syncInfo());
+                }else{
+                    infos.push({bx:i,by:j});
+                }
+            }
+        }
+
+        glink.send("sync",infos);
     },
 
     onTouchBegan:function(touch,event){
-        cc.log("onTouchBegan");
         return true;
     },
 
@@ -36,7 +72,8 @@ var GameLayer = cc.Layer.extend({
     },
 
     onTouchEnded:function(touch,event){
-        cc.log("onTouchEnd");
+        var target = event.getCurrentTarget(); 
+        target.sync();
     },
 
     addBlock:function(block){
