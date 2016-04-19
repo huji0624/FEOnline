@@ -4,9 +4,16 @@
     "id"            : "gameCanvas",
     "renderMode"    : 1,
     "jsList" : [
+        "src/blocks/block.js",
+        "src/blocks/land.js",
+        "src/gamelogic/gamelayer.js",
+
     	"lib/pomeloclient.js",
     	"lib/socket.io.js",
+
         "src/luckylib/cclonglink.js",
+        "src/luckylib/lllog.js",
+
         "src/resource.js",
         "src/app.js"
     ]

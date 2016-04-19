@@ -1,5 +1,5 @@
 
-var glink = new cclonglink();
+var glink = new CCLongLink();
 
 var HelloWorldLayer = cc.Layer.extend({
     sprite:null,
@@ -11,12 +11,15 @@ var HelloWorldLayer = cc.Layer.extend({
         var size = cc.winSize;
 
         // add "HelloWorld" splash screen"
+        var back = new cc.LayerColor(cc.color.BLUE,size.width,size.height);
+        back.setPosition(0,0);
+        this.addChild(back);
 
-        var helloLabel = new cc.LabelTTF("Hello World", "", 38);
-        helloLabel.x = size.width / 2;
-        helloLabel.y = size.height / 2;
-        helloLabel.setFontFillColor(cc.color.BLUE);
-        this.addChild(helloLabel);
+        this.gmlayer = new GameLayer();
+        this.addChild(this.gmlayer);
+
+        this.gmlayer.addBlock(new Land(0,0));
+        this.gmlayer.addBlock(new Land(1,1));
         
         glink.connect("127.0.0.1",3010,{},function(data){
             cc.log(data);

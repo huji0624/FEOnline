@@ -1,5 +1,5 @@
 var res = {
-    // HelloWorld_png : "HelloWorld.png",
+    PL_png : "pl.png",
 };
 
 var g_resources = [];

@@ -1,4 +1,4 @@
-var cclonglink = cc.Class.extend({
+var CCLongLink = cc.Class.extend({
 
 	connect:function (host,port,params,callback){
 		pomelo.init({
@@ -13,11 +13,11 @@ var cclonglink = cc.Class.extend({
 		});
 	},
 
-	disconnect:function() {
+	disConnect:function() {
 		pomelo.disconnect();
 	},
 
-	onevent:function(event,callback){
+	onEvent:function(event,callback){
 		pomelo.on(event,callback);
 	},
 
