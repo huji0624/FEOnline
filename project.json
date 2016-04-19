@@ -6,6 +6,7 @@
     "jsList" : [
     	"lib/pomeloclient.js",
     	"lib/socket.io.js",
+        "src/luckylib/cclonglink.js",
         "src/resource.js",
         "src/app.js"
     ]
