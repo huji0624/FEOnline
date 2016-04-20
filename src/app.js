@@ -15,8 +15,6 @@ var HelloWorldLayer = cc.Layer.extend({
         this.gmlayer = new GameLayer();
         this.addChild(this.gmlayer);
 
-        this.gmlayer.addBlock(new Land(3,3));
-
         return true;
     }
 });

@@ -9,10 +9,10 @@
         "src/luckylib/cclonglink.js",
         "src/luckylib/lllog.js",
 
+        "src/blocks/sblock.js",
         "src/blocks/block.js",
-        "src/blocks/land.js",
+        "src/blocks/transaction.js",
         "src/gamelogic/gamelayer.js",
-
 
         "src/resource.js",
         "src/app.js"

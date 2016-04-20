@@ -11,14 +11,11 @@ var SMap = function(app) {
 
 var gblock = require("./sblock.js")(0,0);
 
-SMap.prototype.test = function() {
-	console.log("SMap xxx");
-};
-
 SMap.prototype.loadMap = function() {
 	this.map = {};
 	var datas = this.mapProvider.loadMap();
-	for b in datas{
+	for (var i in datas){
+		var b = datas[i];
 		this.map[b.posKey()] = b;
 	}
 };
@@ -29,13 +26,17 @@ SMap.prototype.blockAt = function(bx,by) {
 	if(b){
 		return b;
 	}else{
-		return this.mapProvider.blockAt(bx,by);
+		//这里需要重构一下，把map改变block写一套接口.
+		var newb = this.mapProvider.blockAt(bx,by);
+		this.map[newb.posKey()] = newb;
+		return newb;
 	}
 };
 
 SMap.prototype.blocksAt = function(blocks) {
 	var bs = [];
-	for b in blocks{
+	for (var i in blocks){
+		var b = blocks[i];
 		var bx = b.bx;
 		var by = b.by;
 		bs.push(this.blockAt(bx,by));

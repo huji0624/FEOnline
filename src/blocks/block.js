@@ -1,21 +1,20 @@
-var BLOCK_SIZE = 60;
+var BLOCK_SIZE = 100;
 
 var Block = cc.Sprite.extend({
 
-	ctor:function(bx,by){
+	ctor:function(bdata){
 		var sz = BLOCK_SIZE;
 
 		this._super();
 		this.initWithFile(res.PL_png,cc.rect(0,0,sz,sz));
 
-		this.bx = bx;
-		this.by = by;
+		this.sblock = new SBlock(bdata);
 
-		this.x = bx * sz + sz/2;
-		this.y = by * sz + sz/2;
+		this.x = bdata.bx * sz + sz/2;
+		this.y = bdata.by * sz + sz/2;
 
 		//debug
-		var helloLabel = new cc.LabelTTF(this.resPath(), "", 18);
+		var helloLabel = new cc.LabelTTF(this.sblock.bdata.respath, "", 18);
         helloLabel.x = this.width / 2;
         helloLabel.y = this.height / 2;
         helloLabel.setFontFillColor(cc.color.RED);
@@ -24,20 +23,23 @@ var Block = cc.Sprite.extend({
 		return true;
 	},
 
-	syncInfo:function(){
-		return {bx:this.bx,by:this.by,stateid:this.stateid};
+	bx:function(){
+		return this.sblock.bdata.bx;
+	},
+	by:function(){
+		return this.sblock.bdata.by;
 	},
 
-	resPath:function(){
-		return null;
+	updateBlock:function(){
+		ll.info("update block.do nothing.");
+	},
+
+	syncInfo:function(){
+		return {bx:this.sblock.bdata.bx,by:this.sblock.bdata.by,tid:this.sblock.bdata.tid};
 	},
 
 	posKey:function(){
-		return this.bx + "#" + this.by;
-	},
-
-	setBuild:function(build){
-		this.build = build;
+		return this.sblock.posKey();
 	},
 
 });

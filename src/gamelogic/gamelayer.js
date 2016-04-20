@@ -1,12 +1,13 @@
 var glink = new CCLongLink();
-glink.init();
+
+var gsblock = new SBlock(0,0,"");
 
 var GameLayer = cc.Layer.extend({
 
 	ctor:function () {
         this._super();
         this.init();
-        this.blockcaches = {};
+        this.blockcaches = [];
 
         glink.connect("127.0.0.1",3010,{},function(data){
             cc.log(data);
@@ -21,15 +22,26 @@ var GameLayer = cc.Layer.extend({
         });
         cc.eventManager.addListener(touchlis, this);
 
-        this.moveCameraOn(0,0,false);
+        glink.onEvent("syncblock",this.handleSyncBlock.bind(this));
 
-        glink.onEvent("sync",this.handleSync.bind(this));
+        this.moveCameraOn(0,0,false);
+        this.sync();
 
         return true;
     },
 
-    handleSync:function(msg){
-        
+    handleSyncBlock:function(msg){
+        for (var i in msg){
+            var b = msg[i];
+            if(!!b.actionType){
+                var tran = Transaction.fromMsg(b);
+                var block = this.blockWithID(tran.toblockid);
+                block.sblock.transact(tran);
+                block.updateBlock();
+            }else{
+                this.addBlock(new Block(b));
+            }
+        }
     },
 
     moveCameraOn:function(x,y,animate){
@@ -51,7 +63,7 @@ var GameLayer = cc.Layer.extend({
         for (var i = sx; i < ex; i++) {
             for (var j = sy; j < ey; j++) {
                 var b = this.blockAt(i,j);
-                if(b){
+                if(!!b){
                     infos.push(b.syncInfo());
                 }else{
                     infos.push({bx:i,by:j});
@@ -59,7 +71,7 @@ var GameLayer = cc.Layer.extend({
             }
         }
 
-        glink.request("sync",infos,this.handleSync.bind(this));
+        glink.request("syncblock",{"list":infos},this.handleSyncBlock.bind(this));
     },
 
     onTouchBegan:function(touch,event){
@@ -79,25 +91,23 @@ var GameLayer = cc.Layer.extend({
     },
 
     addBlock:function(block){
-    	var b = this.blockAt(block.bx,block.by);
-    	if (b) {
-    		ll.err("block exsit.");
+    	var b = this.blockAt(block.bx(),block.by());
+    	if (!!b) {
+    		ll.err("block exsit."+block.bx()+"#"+block.by());
     	}else{
     		this.blockcaches[block.posKey()] = block;
     		this.addChild(block);
     	}
     },
 
+    //目前blockid和位置相关对后续拓展有风险
     blockAt:function(bx,by){
-        var key = bx+"#"+by;
-        if (key in this.blockcaches){
-            return this.blockcaches[key];
-        }
-    	return null;
+        var key = gsblock.posKeyFrom(bx,by);
+        return this.blockWithID(key);
     },
 
-    updateBlock_ID:function(blockid,data){
-
+    blockWithID:function(blockid){
+        return this.blockcaches[blockid];
     },
 
 });

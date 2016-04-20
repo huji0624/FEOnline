@@ -1,6 +1,4 @@
-//replace
-module.exports = function (bdata){return new SBlock(bdata);};
-//replace
+//replaceThis is auto generate.Do not edit.//replace
 
 var SBLOCK_TRANS_SIZE = 100;
 
