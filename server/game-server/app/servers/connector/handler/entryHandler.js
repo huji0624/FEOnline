@@ -5,10 +5,11 @@ module.exports = function(app) {
 var Handler = function(app) {
   this.app = app;
 
-  channel = app.get('channelService').getChannel("fe",true);
+  this.channel = app.get('channelService').getChannel("fe",true);
+  this.smap = require("../../../game/map/smap.js")(app);
 };
 
-var smap = require("../../../game/smap.js");
+
 
 /**
  * New client entry.
@@ -19,8 +20,22 @@ var smap = require("../../../game/smap.js");
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
+	var uid = "jj";
 
-	channel.add("jiji",this.app.get('serverId'));
+	var sessionService = this.app.get('sessionService');
+	//duplicate log in
+	if( !! sessionService.getByUid(uid)) {
+		next(null, {
+			code: 500,
+			error: true
+		});
+		return;
+	}
+	var sid = this.app.get('serverId');
+	session.bind(uid);
+	session.on('closed', this.leave.bind(this,uid,sid));
+
+	this.channel.add(uid,sid);
 
 	var route_map = {
 		"sync" : "connector.entryHandler.sync"
@@ -29,40 +44,10 @@ Handler.prototype.entry = function(msg, session, next) {
  	next(null, {code: 200, msg: route_map});
 };
 
+Handler.prototype.leave = function(uid,sid){
+	this.channel.leave(uid, sid);
+};
+
 Handler.prototype.sync = function(msg, session, next) {
-  channel.pushMessage("sync",[
-  	{t:0,bx:0,by:0}
-  ]);
-};
-
-/**
- * Publish route for mqtt connector.
- *
- * @param  {Object}   msg     request message
- * @param  {Object}   session current session object
- * @param  {Function} next    next step callback
- * @return {Void}
- */
-Handler.prototype.publish = function(msg, session, next) {
-	var result = {
-		topic: 'publish',
-		payload: JSON.stringify({code: 200, msg: 'publish message is ok.'})
-	};
-  next(null, result);
-};
-
-/**
- * Subscribe route for mqtt connector.
- *
- * @param  {Object}   msg     request message
- * @param  {Object}   session current session object
- * @param  {Function} next    next step callback
- * @return {Void}
- */
-Handler.prototype.subscribe = function(msg, session, next) {
-	var result = {
-		topic: 'subscribe',
-		payload: JSON.stringify({code: 200, msg: 'subscribe message is ok.'})
-	};
-  next(null, result);
+	next(null,[{t:0,bx:0,by:0}]);
 };

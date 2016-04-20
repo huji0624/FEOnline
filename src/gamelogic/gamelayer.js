@@ -23,11 +23,13 @@ var GameLayer = cc.Layer.extend({
 
         this.moveCameraOn(0,0,false);
 
-        glink.onEvent("sync",function(msg){
-            cc.log(msg);
-        });
+        glink.onEvent("sync",this.handleSync.bind(this));
 
         return true;
+    },
+
+    handleSync:function(msg){
+        
     },
 
     moveCameraOn:function(x,y,animate){
@@ -57,7 +59,7 @@ var GameLayer = cc.Layer.extend({
             }
         }
 
-        glink.send("sync",infos);
+        glink.request("sync",infos,this.handleSync.bind(this));
     },
 
     onTouchBegan:function(touch,event){
