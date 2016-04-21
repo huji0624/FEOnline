@@ -13,6 +13,7 @@
         "src/blocks/block.js",
         "src/blocks/transaction.js",
         "src/gamelogic/gamelayer.js",
+        "src/gamelogic/blockdetailview.js",
 
         "src/resource.js",
         "src/app.js"

@@ -43,3 +43,10 @@ var Block = cc.Sprite.extend({
 	},
 
 });
+
+Block.screenPosToBlockPos = function(x,y){
+	var pos = {};
+	pos.bx = Math.floor(x/BLOCK_SIZE);
+	pos.by = Math.floor(y/BLOCK_SIZE);
+	return pos;
+};

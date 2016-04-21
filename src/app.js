@@ -14,6 +14,21 @@ var HelloWorldLayer = cc.Layer.extend({
 
         this.gmlayer = new GameLayer();
         this.addChild(this.gmlayer);
+        this.gmlayer.setDidClickBlock(function(block){
+            if(!!this.detail){
+                this.detail.removeFromParent();
+            }
+            this.detail = new BlockDetailView(block,cc.winSize.width/5,cc.winSize.height);
+            this.detail.x = 0;
+            this.detail.y = 0;
+            this.addChild(this.detail);
+        }.bind(this));
+        this.gmlayer.setOnMoveCallback(function(){
+            if(!!this.detail){
+                this.detail.removeFromParent();
+                this.detail = null;
+            }
+        }.bind(this));
 
         return true;
     }

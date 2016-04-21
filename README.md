@@ -1,6 +1,8 @@
 ## TODO
 
 *   完成server端的map生成，存储，和同步
+*	给transactions增加merge
+*	分离blockid和posKey
 
 =========================
 

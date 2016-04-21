@@ -16,9 +16,9 @@ var GameLayer = cc.Layer.extend({
         var touchlis = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
-            onTouchBegan: this.onTouchBegan,
-            onTouchMoved: this.onTouchMoved,
-            onTouchEnded: this.onTouchEnded
+            onTouchBegan: this.onTouchBegan.bind(this),
+            onTouchMoved: this.onTouchMoved.bind(this),
+            onTouchEnded: this.onTouchEnded.bind(this)
         });
         cc.eventManager.addListener(touchlis, this);
 
@@ -60,8 +60,8 @@ var GameLayer = cc.Layer.extend({
         var ey = sy+Math.floor(size.height/sz);
 
         var infos=[];
-        for (var i = sx; i < ex; i++) {
-            for (var j = sy; j < ey; j++) {
+        for (var i = sx; i <= ex; i++) {
+            for (var j = sy; j <= ey; j++) {
                 var b = this.blockAt(i,j);
                 if(!!b){
                     infos.push(b.syncInfo());
@@ -75,19 +75,38 @@ var GameLayer = cc.Layer.extend({
     },
 
     onTouchBegan:function(touch,event){
+        this.moved = false;
+
         return true;
     },
 
     onTouchMoved:function(touch,event){
         var d = touch.getDelta();
-        var target = event.getCurrentTarget(); 
-        target.moveCameraOn(target.getPositionX()+d.x,target.getPositionY()+d.y,false);
-        return true;
+
+        this.moveCameraOn(this.getPositionX()+d.x,this.getPositionY()+d.y,false);
+
+        this.moved = true;
+
+        this._onMove();
     },
 
     onTouchEnded:function(touch,event){
-        var target = event.getCurrentTarget(); 
-        target.sync();
+        var po = touch.getLocationInView();
+
+        var del = cc.p(-this.getPositionX(),-this.getPositionY());
+        if (!this.moved){
+            this._didClickBlock(this.blockAtScreenPostion(cc.pAdd(po,del)));
+        }else{
+            this.sync();    
+        }
+    },
+
+    setDidClickBlock:function(foo){
+        this._didClickBlock = foo;
+    },
+
+    setOnMoveCallback:function(foo){
+        this._onMove = foo;
     },
 
     addBlock:function(block){
@@ -98,6 +117,11 @@ var GameLayer = cc.Layer.extend({
     		this.blockcaches[block.posKey()] = block;
     		this.addChild(block);
     	}
+    },
+
+    blockAtScreenPostion:function(po){
+        var bpos = Block.screenPosToBlockPos(po.x,po.y);
+        return this.blockAt(bpos.bx,bpos.by);
     },
 
     //目前blockid和位置相关对后续拓展有风险
