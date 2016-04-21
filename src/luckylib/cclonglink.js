@@ -14,7 +14,10 @@ var CCLongLink = cc.Class.extend({
 			log: true
 		}, function() {
 			var route = "connector.entryHandler.entry";
-			pomelo.request(route, params, function(data) {
+			var p = {};
+			p.winSize = cc.winSize;
+			p.info = params;
+			pomelo.request(route,p, function(data) {
 				if(data.code == 200){
 					tmpthis.connecting = true;
 					tmpthis.routeMap = data.msg.routemap;

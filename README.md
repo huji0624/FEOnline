@@ -1,11 +1,11 @@
 ## TODO
 
+*	完成交互配置
 *   完成server端的map生成，存储，和同步....pomelo-sync，pomelo里用于解决游戏进程中需要持久化的数据在内存与存储系统之间的同步问题。
 *	给transactions增加merge
 *	分离blockid和posKey
 *	解决transactions里没有对应tid，但应该同步到最新状态的情况
 *	不在视野范围内的block回收，但存在内存缓存
-*	做一个前端弹窗组件
 
 =========================
 

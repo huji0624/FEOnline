@@ -26,6 +26,8 @@ var Handler = function(app) {
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
+
+	var winSize = msg.winSize;//not used.
 	
 	var sessionService = this.app.get('sessionService');
 	var count = sessionService.getSessionsCount();
@@ -52,8 +54,8 @@ Handler.prototype.entry = function(msg, session, next) {
 	var conf = {
 		mapEdge:{
 			l:-200,
-			t:800,
-			r:800,
+			t:1000,
+			r:1000,
 			b:-200
 		}
 	};
@@ -69,7 +71,7 @@ Handler.prototype.entry = function(msg, session, next) {
 };
 
 Handler.prototype.leave = function(uid,sid){
-	ll.info(uid+"leave.");
+	ll.info(uid+" leave.");
 	this.channel.leave(uid, sid);
 };
 
