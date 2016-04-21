@@ -1,9 +1,15 @@
+var glink = new CCLongLink();
+
 var HelloWorldLayer = cc.Layer.extend({
     // sprite:null,
     ctor:function () {
         //////////////////////////////
         // 1. super init first
         this._super();
+
+        glink.connect("127.0.0.1",3010,{},function(data){
+            this.showUserInfo(data.msg.user);
+        }.bind(this));
 
         var size = cc.winSize;
 
@@ -31,7 +37,16 @@ var HelloWorldLayer = cc.Layer.extend({
         }.bind(this));
 
         return true;
-    }
+    },
+
+    showUserInfo:function(user){
+        var size = cc.winSize;
+        var helloLabel = new cc.LabelTTF(user.name, "", 20);
+        helloLabel.x = size.width - 20;
+        helloLabel.y = size.height - 20;
+        helloLabel.setFontFillColor(cc.color.RED);
+        this.addChild(helloLabel);
+    },
 });
 
 var HelloWorldScene = cc.Scene.extend({

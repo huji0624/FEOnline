@@ -17,7 +17,7 @@ var CCLongLink = cc.Class.extend({
 			pomelo.request(route, params, function(data) {
 
 				tmpthis.connecting = true;
-				tmpthis.routeMap = data.msg;
+				tmpthis.routeMap = data.msg.routemap;
 				tmpthis.flushMsg();
 
 				callback(data);

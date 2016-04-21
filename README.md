@@ -3,6 +3,7 @@
 *   完成server端的map生成，存储，和同步
 *	给transactions增加merge
 *	分离blockid和posKey
+*	解决transactions里没有对应tid，但应该同步到最新状态的情况
 
 =========================
 

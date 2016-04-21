@@ -17,7 +17,7 @@ var Block = cc.Sprite.extend({
 		var helloLabel = new cc.LabelTTF(this.sblock.bdata.respath, "", 18);
         helloLabel.x = this.width / 2;
         helloLabel.y = this.height / 2;
-        helloLabel.setFontFillColor(cc.color.RED);
+        helloLabel.setFontFillColor(cc.color.BLUE);
         this.addChild(helloLabel);
 
 		return true;

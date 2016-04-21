@@ -1,5 +1,3 @@
-var glink = new CCLongLink();
-
 var gsblock = new SBlock(0,0,"");
 
 var GameLayer = cc.Layer.extend({
@@ -8,10 +6,6 @@ var GameLayer = cc.Layer.extend({
         this._super();
         this.init();
         this.blockcaches = [];
-
-        glink.connect("127.0.0.1",3010,{},function(data){
-            cc.log(data);
-        });
 
         var touchlis = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,

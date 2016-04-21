@@ -26,9 +26,11 @@ var Handler = function(app) {
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
-	var uid = "jj";
-
+	
 	var sessionService = this.app.get('sessionService');
+	var count = sessionService.getSessionsCount();
+	var uid = "jj#"+count;
+
 	//duplicate log in
 	if( !! sessionService.getByUid(uid)) {
 		next(null, {
@@ -43,11 +45,17 @@ Handler.prototype.entry = function(msg, session, next) {
 
 	this.channel.add(uid,sid);
 
-	var route_map = {
+	var routeMap = {
 		"syncblock" : "connector.entryHandler.syncblock"
 	};
 
- 	next(null, {code: 200, msg: route_map});
+ 	next(null, {code: 200, msg: {
+ 		routemap:routeMap,
+ 		user:{
+ 			name:uid
+ 			}
+ 		}
+ 	});
 };
 
 Handler.prototype.leave = function(uid,sid){
