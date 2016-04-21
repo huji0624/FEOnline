@@ -4,8 +4,9 @@ var GameLayer = cc.Layer.extend({
 
 	ctor:function () {
         this._super();
-        this.init();
         this.blockcaches = [];
+
+        this.size = cc.winSize;
 
         var touchlis = cc.EventListener.create({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
@@ -39,6 +40,19 @@ var GameLayer = cc.Layer.extend({
     },
 
     moveCameraOn:function(x,y,animate){
+        if(!!this.mapEdge){
+            var eg = this.mapEdge;
+            var sz = this.size;
+            var r = eg.r;
+            var t = eg.t;
+            var b = eg.b;
+            var l = eg.l;
+            if (x>-l) {x=-l;}
+            if (y>-b) {y=-b;}
+            if (sz.width-x>r) {x=sz.width-r;}
+            if (sz.height-y>t) {y=sz.height-t;}
+        }           
+
         this.setPosition(x,y);
     },
 
@@ -46,7 +60,7 @@ var GameLayer = cc.Layer.extend({
         var x = -this.getPositionX();
         var y = -this.getPositionY();
 
-        var size = cc.winSize;
+        var size = this.size;
         var sz = BLOCK_SIZE;
         var sx = Math.floor(x/sz);
         var ex = sx+Math.floor(size.width/sz);
@@ -70,7 +84,6 @@ var GameLayer = cc.Layer.extend({
 
     onTouchBegan:function(touch,event){
         this.moved = false;
-
         return true;
     },
 
@@ -89,7 +102,9 @@ var GameLayer = cc.Layer.extend({
 
         var del = cc.p(-this.getPositionX(),-this.getPositionY());
         if (!this.moved){
-            this._didClickBlock(this.blockAtScreenPostion(cc.pAdd(po,del)));
+            var lpos = cc.pAdd(po,del);
+            cc.log(lpos);
+            this._didClickBlock(this.blockAtScreenPostion(lpos));
         }else{
             this.sync();    
         }

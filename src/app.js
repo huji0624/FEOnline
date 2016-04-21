@@ -8,17 +8,29 @@ var HelloWorldLayer = cc.Layer.extend({
         this._super();
 
         glink.connect("127.0.0.1",3010,{},function(data){
-            this.showUserInfo(data.msg.user);
+            if(data.code == 200){
+                LLToast.show("Login OK.");
+                this.setUpGameLayer(data.msg.config);
+                this.showUserInfo(data.msg.user);
+            }else{
+                LLToast.show(data.error);
+            }
         }.bind(this));
+
+        return true;
+    },
+
+    setUpGameLayer:function(config){
 
         var size = cc.winSize;
 
         // add "HelloWorld" splash screen"
         var back = new cc.LayerColor(cc.color.BLUE,size.width,size.height);
-        back.setPosition(0,0);
+        // back.setPosition(size.width/2,size.height/2);
         this.addChild(back);
 
         this.gmlayer = new GameLayer();
+        this.gmlayer.mapEdge = config.mapEdge;
         this.addChild(this.gmlayer);
         this.gmlayer.setDidClickBlock(function(block){
             if(!!this.detail){
@@ -36,7 +48,6 @@ var HelloWorldLayer = cc.Layer.extend({
             }
         }.bind(this));
 
-        return true;
     },
 
     showUserInfo:function(user){

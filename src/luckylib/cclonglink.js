@@ -15,11 +15,13 @@ var CCLongLink = cc.Class.extend({
 		}, function() {
 			var route = "connector.entryHandler.entry";
 			pomelo.request(route, params, function(data) {
-
-				tmpthis.connecting = true;
-				tmpthis.routeMap = data.msg.routemap;
-				tmpthis.flushMsg();
-
+				if(data.code == 200){
+					tmpthis.connecting = true;
+					tmpthis.routeMap = data.msg.routemap;
+					tmpthis.flushMsg();
+	
+				}
+				
 				callback(data);
 			});
 		});

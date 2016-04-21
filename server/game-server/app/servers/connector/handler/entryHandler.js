@@ -29,13 +29,13 @@ Handler.prototype.entry = function(msg, session, next) {
 	
 	var sessionService = this.app.get('sessionService');
 	var count = sessionService.getSessionsCount();
-	var uid = "jj#"+count;
+	var uid = "jj#"+session.id;
 
 	//duplicate log in
 	if( !! sessionService.getByUid(uid)) {
 		next(null, {
 			code: 500,
-			error: true
+			error: uid +" already login."
 		});
 		return;
 	}
@@ -49,7 +49,17 @@ Handler.prototype.entry = function(msg, session, next) {
 		"syncblock" : "connector.entryHandler.syncblock"
 	};
 
+	var conf = {
+		mapEdge:{
+			l:-200,
+			t:800,
+			r:800,
+			b:-200
+		}
+	};
+
  	next(null, {code: 200, msg: {
+ 		config:conf,
  		routemap:routeMap,
  		user:{
  			name:uid
@@ -59,6 +69,7 @@ Handler.prototype.entry = function(msg, session, next) {
 };
 
 Handler.prototype.leave = function(uid,sid){
+	ll.info(uid+"leave.");
 	this.channel.leave(uid, sid);
 };
 
