@@ -8,7 +8,11 @@
         "lib/socket.io.js",
         "src/luckylib/cclonglink.js",
         "src/luckylib/lllog.js",
+        "src/luckylib/llback.js",
         "src/luckylib/lltoast.js",
+        "src/luckylib/lllabel.js",
+        "src/luckylib/lltextbutton.js",
+        "src/luckylib/llinput.js",
 
         "src/blocks/sblock.js",
         "src/blocks/block.js",

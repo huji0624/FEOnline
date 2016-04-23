@@ -13,13 +13,13 @@ var BlockDetailView = cc.Node.extend({
 
 		//debug
 		var str = JSON.stringify(block.sblock.bdata);
-		var helloLabel = new cc.LabelTTF(str, "", 20 , cc.size(this.width,0));
-        helloLabel.x = this.width / 2;
-        helloLabel.y = this.height / 2;
-        helloLabel.setFontFillColor(cc.color.RED);
-        this.addChild(helloLabel);
+		var label = new LLLabel(str, 20 ,this.width);
+        label.x = this.width / 2;
+        label.y = this.height / 2;
+        label.setTextColor(cc.color.RED);
+        this.addChild(label);
 
-        this.cview = helloLabel;
+        this.cview = label;
         this.block = block;
 	},
 

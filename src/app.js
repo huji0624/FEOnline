@@ -7,6 +7,18 @@ var HelloWorldLayer = cc.Layer.extend({
         // 1. super init first
         this._super();
 
+        this.loginback = new LLBack(cc.color.YELLOW,cc.winSize.width,cc.winSize.height);
+        this.addChild(this.loginback,0);
+
+        LLInput.show("username",this.loginConfirm.bind(this));
+
+        return true;
+    },
+
+    loginConfirm:function(username){
+        cc.log(username);
+        return;
+
         glink.connect("127.0.0.1",3010,{},function(data){
             if(data.code == 200){
                 LLToast.show("Login OK.");
@@ -17,7 +29,6 @@ var HelloWorldLayer = cc.Layer.extend({
             }
         }.bind(this));
 
-        return true;
     },
 
     setUpGameLayer:function(config){
