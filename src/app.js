@@ -16,10 +16,9 @@ var HelloWorldLayer = cc.Layer.extend({
     },
 
     loginConfirm:function(username){
-        cc.log(username);
-        return;
 
-        glink.connect("127.0.0.1",3010,{},function(data){
+        glink.connect("127.0.0.1",3010,{uid:username},function(data){
+            cc.log(data);
             if(data.code == 200){
                 LLToast.show("Login OK.");
                 this.setUpGameLayer(data.msg.config);
