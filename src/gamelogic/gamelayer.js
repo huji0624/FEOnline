@@ -20,7 +20,9 @@ var GameLayer = cc.Layer.extend({
         glink.onEvent("syncblock",this.handleSyncBlock.bind(this));
 
         this.moveCameraOn(0,0,false);
-        this.sync();
+
+        // this.sync();
+        glink.request("syncallblock",{},this.handleSyncBlock.bind(this));
 
         return true;
     },
@@ -43,10 +45,10 @@ var GameLayer = cc.Layer.extend({
         if(!!this.mapEdge){
             var eg = this.mapEdge;
             var sz = this.size;
-            var r = eg.r;
-            var t = eg.t;
-            var b = eg.b;
-            var l = eg.l;
+            var r = eg.r + 100;
+            var t = eg.t + 100;
+            var b = eg.b - 100;
+            var l = eg.l - 100;
             if (x>-l) {x=-l;}
             if (y>-b) {y=-b;}
             if (sz.width-x>r) {x=sz.width-r;}
@@ -73,8 +75,6 @@ var GameLayer = cc.Layer.extend({
                 var b = this.blockAt(i,j);
                 if(!!b){
                     infos.push(b.syncInfo());
-                }else{
-                    infos.push({bx:i,by:j});
                 }
             }
         }
@@ -94,7 +94,9 @@ var GameLayer = cc.Layer.extend({
 
         this.moved = true;
 
-        this._onMove();
+        if (!!this._onMove) {
+            this._onMove();
+        }
     },
 
     onTouchEnded:function(touch,event){
@@ -103,8 +105,8 @@ var GameLayer = cc.Layer.extend({
         var del = cc.p(-this.getPositionX(),-this.getPositionY());
         if (!this.moved){
             var lpos = cc.pAdd(po,del);
-            cc.log(lpos);
-            this._didClickBlock(this.blockAtScreenPostion(lpos));
+            var block = this.blockAtScreenPostion(lpos);
+            this._didClickBlock(block);
         }else{
             this.sync();    
         }

@@ -8,5 +8,5 @@ pro.loadMap = function(){
 };
 
 pro.blockAt = function(bx,by){
-	return new SBlock({bx:bx,by:by,respath:"pl.png",tid:"#"});
+	return new SBlock({bx:bx,by:by,respath:"pl.png",tid:"#",v:0});
 };

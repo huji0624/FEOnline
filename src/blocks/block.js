@@ -14,13 +14,27 @@ var Block = cc.Sprite.extend({
 		this.y = bdata.by * sz + sz/2;
 
 		//debug
-		var helloLabel = new cc.LabelTTF(this.sblock.bdata.respath+"\n"+bdata.bx+"#"+bdata.by, "", 18);
-        helloLabel.x = this.width / 2;
-        helloLabel.y = this.height / 2;
-        helloLabel.setFontFillColor(cc.color.BLUE);
-        this.addChild(helloLabel);
+		var info = new cc.LabelTTF(bdata.bx+"#"+bdata.by, "", 18);
+        info.x = this.width / 2;
+        info.y = this.height / 2;
+        info.setFontFillColor(cc.color.BLUE);
+        this.addChild(info);
 
 		return true;
+	},
+
+	setFlag:function(flag){
+		if (flag>0) {
+			var f = new cc.LabelTTF(flag, "", 18);
+	        f.x = this.width / 2;
+	        f.y = this.height / 2;
+	        f.setFontFillColor(cc.color.RED);
+	        this.addChild(f);
+	        this.flag = f;
+		}else{
+			this.flag.removeFromParent();
+			this.flag = null;
+		}
 	},
 
 	bx:function(){

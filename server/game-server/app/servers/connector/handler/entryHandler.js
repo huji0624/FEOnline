@@ -54,16 +54,18 @@ Handler.prototype.entry = function(msg, session, next) {
 	this.channel.add(uid, sid);
 
 	var routeMap = {
-		"syncblock": "connector.entryHandler.syncblock"
+		"syncblock": "connector.entryHandler.syncblock",
+		"syncallblock": "connector.entryHandler.syncallblock"
 	};
 
 	var conf = {
 		mapEdge: {
-			l: -200,
+			l: 0,
 			t: 1000,
 			r: 1000,
-			b: -200
-		}
+			b: 0
+		},
+		mode:0
 	};
 
 	next(null, {
@@ -98,6 +100,22 @@ Handler.prototype.syncblock = function(msg, session, next) {
 				response.push(tran.toMsg());
 			}
 		} else {
+			var block = this.smap.blockAt(bx, by);
+			response.push(block.bdata);
+		}
+	}
+
+	next(null, response);
+};
+
+Handler.prototype.syncallblock = function(msg, session, next) {
+
+	var response = [];
+
+	for (var i = 0 ; i < 15 ; i++) {
+		for (var j = 0; j < 15; j++) {
+			var bx = i;
+			var by = j;
 			var block = this.smap.blockAt(bx, by);
 			response.push(block.bdata);
 		}

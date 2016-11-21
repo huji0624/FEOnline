@@ -7,67 +7,29 @@ var HelloWorldLayer = cc.Layer.extend({
         // 1. super init first
         this._super();
 
-        this.loginback = new LLBack(cc.color.YELLOW,cc.winSize.width,cc.winSize.height);
-        this.addChild(this.loginback,0);
+        var sz = cc.winSize;
+        var ma = 30;
 
-        LLInput.show("username",this.loginConfirm.bind(this));
+        var bt = new LLTextButton("Single",100,50);
+        bt.setClickListener(this.singleClick.bind(this));
+        bt.setPosition(sz.width/2,sz.height/2 + ma);
+        this.addChild(bt);
+
+        bt = new LLTextButton("PVP",100,50);
+        bt.setClickListener(this.multiClick.bind(this));
+        bt.setPosition(sz.width/2,sz.height/2 - ma);
+        this.addChild(bt);
 
         return true;
     },
 
-    loginConfirm:function(username){
-
-        glink.connect("127.0.0.1",3010,{uid:username},function(data){
-            cc.log(data);
-            if(data.code == 200){
-                LLToast.show("Login OK.");
-                this.setUpGameLayer(data.msg.config);
-                this.showUserInfo(data.msg.user);
-            }else{
-                LLToast.show(data.error);
-            }
-        }.bind(this));
-
+    singleClick:function(){
+        cc.director.runScene(new SinglePlayScene());
     },
 
-    setUpGameLayer:function(config){
-
-        var size = cc.winSize;
-
-        // add "HelloWorld" splash screen"
-        var back = new cc.LayerColor(cc.color.BLUE,size.width,size.height);
-        // back.setPosition(size.width/2,size.height/2);
-        this.addChild(back);
-
-        this.gmlayer = new GameLayer();
-        this.gmlayer.mapEdge = config.mapEdge;
-        this.addChild(this.gmlayer);
-        this.gmlayer.setDidClickBlock(function(block){
-            if(!!this.detail){
-                this.detail.removeFromParent();
-            }
-            this.detail = new BlockDetailView(block,cc.winSize.width/5,cc.winSize.height);
-            this.detail.x = 0;
-            this.detail.y = 0;
-            this.addChild(this.detail);
-        }.bind(this));
-        this.gmlayer.setOnMoveCallback(function(){
-            if(!!this.detail){
-                this.detail.removeFromParent();
-                this.detail = null;
-            }
-        }.bind(this));
-
-    },
-
-    showUserInfo:function(user){
-        var size = cc.winSize;
-        var helloLabel = new cc.LabelTTF(user.name, "", 20);
-        helloLabel.x = size.width - 20;
-        helloLabel.y = size.height - 20;
-        helloLabel.setFontFillColor(cc.color.RED);
-        this.addChild(helloLabel);
-    },
+    multiClick:function(){
+        cc.director.runScene(new MultiPlayScene());
+    }
 });
 
 var HelloWorldScene = cc.Scene.extend({

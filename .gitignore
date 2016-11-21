@@ -1,2 +1,3 @@
 server/game-server/node_modules
 server/game-server/logs
+.DS_Store

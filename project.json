@@ -19,6 +19,12 @@
         "src/blocks/transaction.js",
         "src/gamelogic/gamelayer.js",
         "src/gamelogic/blockdetailview.js",
+        "src/gamelogic/opview.js",
+
+        "src/gamelogic/playground.js",
+
+        "src/single.js",
+        "src/multi.js",
 
         "src/resource.js",
         "src/app.js"
